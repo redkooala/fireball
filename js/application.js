@@ -69,15 +69,6 @@ var warlock = function ( ) {
 }
 
 warlock.prototype = {
-    move: function () {
-
-       /* var x = this.x > mouse.x ? this.x - 1 : this.x + 1
-        var y = this.y > mouse.y ? this.y - 1 : this.y + 1
-*/
-/*
-        this.x = x
-        this.y = y*/
-    },
 
     draw: function () {
          if(this.target) {
@@ -85,12 +76,27 @@ warlock.prototype = {
              this.y = this.y > this.target.y ? this.y - 1 : this.y + 1
          }
 
-
         ctx.drawImage(resources.get('img/warlock.jpg'), this.x , this.y , 100, 100);
     }
-
 }
 
+var balls = []
+window.onkeypress = function ( event ) {
+    if(event.code === 'Space') {
+        balls.push( new fireBall( w.x, w.y, mouse ))
+    }
+}
+
+
+window.onmousemove = function( event ) {
+    offsetTop = event.target.offsetTop,
+        offsetLeft = event.target.offsetLeft,
+        positionY = event.pageY - offsetTop,
+        positionX = event.pageX - offsetLeft
+
+    mouse.x = positionX
+    mouse.y = positionY
+}
 
 //HEPLERS
 window.onmousedown = function ( event ) {
@@ -103,14 +109,33 @@ window.onmousedown = function ( event ) {
 
         mouse.x = positionX - 50
         mouse.y = positionY - 50
-        w.target = mouse
-        //w.move()
+        w.target = {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50}
+    }
+}
+
+var fireBall = function ( x,y, target ) {
+    this.x = x
+    this.y = y
+    this.target = target
+
+    var dx = this.x > target.x ? - 3:  +3
+    var dy  = this.y > target.y ? - 3:  +3
+
+
+    this.draw =  function () {
+        if(this.target) {
+            this.x = this.x + dx
+            this.y = this.y + dy
+        }
+
+        ctx.drawImage(resources.get('img/fireball.png'), this.x , this.y , 200, 50);
     }
 }
 
 
-var createImage = function ( x, y ) {
-    ctx.drawImage(resources.get('img/warlock.jpg'), x , y , 100, 100);
+
+var createImage = function (  ) {
+    ctx.drawImage(resources.get('img/fireball.png'), 300 , 400 , 200, 50);
 }
 
 var lastTime
@@ -132,16 +157,24 @@ function init() {
     main()
 }
 
+var drowFireBalls  = function () {
+    balls.forEach( function (ball) {
+        ball.draw()
+    } )
+}
 
 var w = new warlock()
 
 function render() {
+
 
     ctx.fillStyle = terrainPattern
     ctx.fillStyle = lavaPattern
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     drawArena()
     w.draw()
+    drowFireBalls()
+
 };
 
 
@@ -149,7 +182,8 @@ window.onload = function() {
     resources.load([
         'img/bitum.png',
         'img/lava.png',
-        'img/warlock.jpg'
+        'img/warlock.jpg',
+        'img/fireball.png'
     ]);
     resources.onReady(init);
 }
