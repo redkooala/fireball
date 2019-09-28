@@ -1,13 +1,12 @@
 let socket = io()
+
 var GameCore = function () {
     this.build = function () {
        var canvas = _createCanvas()
        return canvas
     }
 
-    socket.on('test', function(data) {
-        console.log(data)
-    })
+    socket.emit('newPlayer')
 
 
     _createCanvas = function () {

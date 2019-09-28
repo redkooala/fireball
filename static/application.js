@@ -60,22 +60,6 @@ var mouse = {
 }
 
 
-var warlock = function ( ) {
-    this.x = 400
-    this.y = 500
-}
-
-warlock.prototype = {
-
-    draw: function () {
-         if(this.target) {
-             this.x = this.x > this.target.x ? this.x - 1 : this.x + 1
-             this.y = this.y > this.target.y ? this.y - 1 : this.y + 1
-         }
-
-        ctx.drawImage(resources.get('/static/img/warlock.jpg'), this.x , this.y , 100, 100);
-    }
-}
 
 var balls = []
 window.onkeypress = function ( event ) {
@@ -97,7 +81,6 @@ window.onmousemove = function( event ) {
 
 //HEPLERS
 window.onmousedown = function ( event ) {
-    soccet.emit('mousedown', event)
     if( event.target === canvas ) {
         var
             offsetTop = event.target.offsetTop,
@@ -107,7 +90,7 @@ window.onmousedown = function ( event ) {
 
         mouse.x = positionX - 50
         mouse.y = positionY - 50
-        w.target = {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50}
+        //w.target = {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50} socket.emit('mousedown', {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50})
     }
 }
 
@@ -161,14 +144,41 @@ var drowFireBalls  = function () {
     } )
 }
 
-var w = new warlock()
+var warlock = function (x, y) {
+    this.x = x
+    this.y = y
+}
+
+warlock.prototype = {
+
+    draw: function () {
+         if(this.target) {
+             this.x = this.x > this.target.x ? this.x - 1 : this.x + 1
+             this.y = this.y > this.target.y ? this.y - 1 : this.y + 1
+         }
+
+        ctx.drawImage(resources.get('/static/img/warlock.jpg'), this.x , this.y , 100, 100);
+    }
+}
+
+var warlocks = []
+socket.on('state', function(players) {
+    warlocks = []
+    for (var id in players) {
+        var player = players[id];
+        let w = new warlock(player.x, player.y)
+        warlocks.push(w)
+  }
+})
 
 function render() {
     ctx.fillStyle = terrainPattern
     ctx.fillStyle = lavaPattern
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     drawArena()
-    w.draw()
+    warlocks.forEach(function(w) {
+        w.draw()
+    })
     drowFireBalls()
 };
 
