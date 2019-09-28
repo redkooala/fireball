@@ -110,22 +110,22 @@ window.onmousedown = function ( event ) {
     }
 }
 
-var fireBall = function ( x,y, target ) {
+var fireBall = function (x, y, target) {
     this.x = x
     this.y = y
     this.target = target
+    console.log(target)
 
-    var dx = this.x > target.x ? - 3:  +3
-    var dy  = this.y > target.y ? - 3:  +3
+    var dx = this.x > target.x ? -3 : +3
+    var dy = this.y > target.y ? -3 : +3
 
-
-    this.draw =  function () {
-        if(this.target) {
+    this.draw = function () {
+        if (this.target) {
             this.x = this.x + dx
             this.y = this.y + dy
         }
 
-        ctx.drawImage(resources.get('/static/img/fireball.png'), this.x , this.y , 200, 50);
+        ctx.drawImage(resources.get('/static/img/fireball.png'), this.x, this.y, 200, 50);
     }
 }
 
@@ -163,15 +163,12 @@ var drowFireBalls  = function () {
 var w = new warlock()
 
 function render() {
-
-
     ctx.fillStyle = terrainPattern
     ctx.fillStyle = lavaPattern
     ctx.fillRect(0, 0, canvas.width, canvas.height)
     drawArena()
     w.draw()
     drowFireBalls()
-
 };
 
 

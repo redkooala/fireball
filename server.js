@@ -20,7 +20,7 @@ server.listen(5000, function() {
 });
 
 io.on('connection', function(socket) {
-
+    console.log('Great mao!')
 });
 
 io.sockets.emit('test', 'hi!');

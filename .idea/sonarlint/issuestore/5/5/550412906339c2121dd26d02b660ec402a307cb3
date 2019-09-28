@@ -1,0 +1,12 @@
+
+{javascript:S2703["_Add the "let", "const" or "var" keyword to this declaration of "positionY" to make it explicit.(ŞÔ¨­
+qjavascript:S4143§"TVerify this is the index that was intended; 'fillStyle' was already set on line 166.(È ğİ
+>javascript:S1116¬"Remove this empty statement.(ôŸìúÿÿÿÿ
+{javascript:S2703\"_Add the "let", "const" or "var" keyword to this declaration of "positionX" to make it explicit.(£¶ìí
+javascript:S2703Z"`Add the "let", "const" or "var" keyword to this declaration of "offsetLeft" to make it explicit.(ÓàÎòüÿÿÿÿ
+Yjavascript:UnusedVariable"3Remove the declaration of the unused 'dt' variable.(ƒŠÑƒ
+~javascript:S2703—"aAdd the "let", "const" or "var" keyword to this declaration of "lavaPattern" to make it explicit.(ß±ä
+Rjavascript:S1854"5Remove this useless assignment to local variable "dt"(ƒŠÑƒ
+{javascript:S2703Y"_Add the "let", "const" or "var" keyword to this declaration of "offsetTop" to make it explicit.(Ï¥Ü«
+†javascript:S2703–"dAdd the "let", "const" or "var" keyword to this declaration of "terrainPattern" to make it explicit.(ğÉàÓüÿÿÿÿ
+Pjavascript:S878Y"5Remove use of all comma operators in this expression.(Ï¥Ü«
