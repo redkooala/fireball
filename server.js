@@ -20,7 +20,8 @@ server.listen(5000, function() {
 });
 
 io.on('connection', function(socket) {
-    console.log('Great mao!')
+    socket.on('mousedown', function(event) {
+        console.log('event')
+        console.log(event)
+    })
 });
-
-io.sockets.emit('test', 'hi!');

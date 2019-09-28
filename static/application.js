@@ -97,6 +97,7 @@ window.onmousemove = function( event ) {
 
 //HEPLERS
 window.onmousedown = function ( event ) {
+    soccet.emit('mousedown', event)
     if( event.target === canvas ) {
         var
             offsetTop = event.target.offsetTop,
