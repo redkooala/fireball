@@ -90,7 +90,8 @@ window.onmousedown = function ( event ) {
 
         mouse.x = positionX - 50
         mouse.y = positionY - 50
-        //w.target = {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50} socket.emit('mousedown', {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50})
+        //w.target = {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50} 
+        socket.emit('mousedown', {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50})
     }
 }
 
@@ -152,12 +153,16 @@ var warlock = function (x, y) {
 warlock.prototype = {
 
     draw: function () {
-         if(this.target) {
-             this.x = this.x > this.target.x ? this.x - 1 : this.x + 1
-             this.y = this.y > this.target.y ? this.y - 1 : this.y + 1
-         }
+        if(this.target) {
+            this.x = this.x > this.target.x ? this.x - 1 : this.x + 1
+            this.y = this.y > this.target.y ? this.y - 1 : this.y + 1
+        }
+        ctx.fillStyle = 'green'
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 25, 0, 2 * Math.PI);
+        ctx.fill();
 
-        ctx.drawImage(resources.get('/static/img/warlock.jpg'), this.x , this.y , 100, 100);
+        //ctx.drawImage(resources.get('/static/img/warlock.jpg'), this.x , this.y , 100, 100);
     }
 }
 

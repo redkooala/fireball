@@ -12,8 +12,8 @@ var GameCore = function () {
     _createCanvas = function () {
         var canvas = document.createElement( "canvas" )
         var ctx = canvas.getContext( "2d" )
-        canvas.width = 1220
-        canvas.height = 1220
+        canvas.width = 940 
+        canvas.height = 940
         return  { canvas: canvas, ctx: ctx }
     }
 }
