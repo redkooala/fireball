@@ -8,7 +8,7 @@ var center = {
     y:  canvas.height /2
 }
 
-function drawArena(  ) {
+function drawArena() {
     var
         polygonPadding = canvas.width / 15,
         borderOffset = canvas.height / 3.5,
@@ -53,24 +53,21 @@ function drawArena(  ) {
     ctx.fill();
 }
 
-
 var mouse = {
     x : canvas.width / 2,
     y : canvas.height /2
 }
 
-
-
 var balls = []
 window.onkeypress = function ( event ) {
     if(event.code === 'Space') {
-        balls.push( new fireBall( w.x, w.y, mouse ))
+       // balls.push( new fireBall( w.x, w.y, mouse ))
     }
 }
 
 
 window.onmousemove = function( event ) {
-    offsetTop = event.target.offsetTop,
+    var offsetTop = event.target.offsetTop,
         offsetLeft = event.target.offsetLeft,
         positionY = event.pageY - offsetTop,
         positionX = event.pageX - offsetLeft
@@ -79,27 +76,12 @@ window.onmousemove = function( event ) {
     mouse.y = positionY
 }
 
-//HEPLERS
-window.onmousedown = function ( event ) {
-    if( event.target === canvas ) {
-        var
-            offsetTop = event.target.offsetTop,
-            offsetLeft = event.target.offsetLeft,
-            positionY = event.pageY - offsetTop,
-            positionX = event.pageX - offsetLeft
 
-        mouse.x = positionX - 50
-        mouse.y = positionY - 50
-        //w.target = {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50} 
-        socket.emit('mousedown', {x: event.pageX - offsetLeft -50, y: event.pageY - offsetTop - 50})
-    }
-}
 
 var fireBall = function (x, y, target) {
     this.x = x
     this.y = y
     this.target = target
-    console.log(target)
 
     var dx = this.x > target.x ? -3 : +3
     var dy = this.y > target.y ? -3 : +3
@@ -117,7 +99,7 @@ var fireBall = function (x, y, target) {
 
 
 var createImage = function (  ) {
-    ctx.drawImage(resources.get('/static/img/fireball.png'), 300 , 400 , 200, 50);
+    ctx.drawImage(resources.get('/static/img/fireball.png'), 300 , 400 , 200, 50)
 }
 
 var lastTime
@@ -151,13 +133,21 @@ var warlock = function (x, y) {
 }
 
 warlock.prototype = {
-
     draw: function () {
-        if(this.target) {
-            this.x = this.x > this.target.x ? this.x - 1 : this.x + 1
-            this.y = this.y > this.target.y ? this.y - 1 : this.y + 1
+        if (this.direction) {
+            var speed = {
+                x: this.direction.x - this.x,
+                y: this.direction.y - this.y
+            }
+
+            var length = Math.sqrt(Math.pow(speed.x, 2) + Math.pow(speed.y, 2))
+
+            this.x += speed.x/length * 2
+            this.y += speed.y/length * 2
+            
         }
-        ctx.fillStyle = 'green'
+
+        ctx.fillStyle = 'red'
         ctx.beginPath();
         ctx.arc(this.x, this.y, 25, 0, 2 * Math.PI);
         ctx.fill();
@@ -166,15 +156,34 @@ warlock.prototype = {
     }
 }
 
-var warlocks = []
-socket.on('state', function(players) {
-    warlocks = []
-    for (var id in players) {
-        var player = players[id];
-        let w = new warlock(player.x, player.y)
-        warlocks.push(w)
-  }
-})
+//HEPLERS
+window.onmousedown = function ( e ) {
+    if( e.target === canvas ) {
+        var player = warlocks[0]
+        player.direction = {
+            x: mouse.x,
+            y: mouse.y
+        }
+        // var direction = {
+        //     x: mouse.x - player.x,
+        //     y: player.y - mouse.y
+        // }
+    }
+}
+
+
+warlocks = []
+warlocks.push(new warlock(mouse.x, mouse.y))
+
+// socket.on('state', function(players) {
+//     warlocks = []
+//     for (var id in players) {
+//         var player = players[id];
+//         var position = player.positonVector
+//         let w = new warlock(position.x, position.y)
+//         warlocks.push(w)
+//   }
+// })
 
 function render() {
     ctx.fillStyle = terrainPattern
