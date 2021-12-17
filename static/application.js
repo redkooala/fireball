@@ -1,17 +1,17 @@
 var game = new GameCore(), gameCompents = game.build(), canvas = gameCompents.canvas,
     ctx = gameCompents.ctx
 
-document.querySelector( 'body' ).appendChild( canvas )
+document.querySelector('body').appendChild(canvas)
 
 var center = {
-    x:  canvas.width  /2,
+    x:  canvas.width / 2,
     y:  canvas.height /2
 }
 
 function drawArena() {
     var
         polygonPadding = canvas.width / 15,
-        borderOffset = canvas.height / 3.5,
+        borderOffset = canvas.height / 4.5,
         polygonTop = {
             x: canvas.width / 2,
             y: polygonPadding
@@ -48,7 +48,6 @@ function drawArena() {
     } )
 
 
-
     ctx.fillStyle = terrainPattern;
     ctx.fill();
 }
@@ -56,13 +55,6 @@ function drawArena() {
 var mouse = {
     x : canvas.width / 2,
     y : canvas.height /2
-}
-
-var balls = []
-window.onkeypress = function ( event ) {
-    if(event.code === 'Space') {
-       // balls.push( new fireBall( w.x, w.y, mouse ))
-    }
 }
 
 
@@ -74,32 +66,6 @@ window.onmousemove = function( event ) {
 
     mouse.x = positionX
     mouse.y = positionY
-}
-
-
-
-var fireBall = function (x, y, target) {
-    this.x = x
-    this.y = y
-    this.target = target
-
-    var dx = this.x > target.x ? -3 : +3
-    var dy = this.y > target.y ? -3 : +3
-
-    this.draw = function () {
-        if (this.target) {
-            this.x = this.x + dx
-            this.y = this.y + dy
-        }
-
-        ctx.drawImage(resources.get('/static/img/fireball.png'), this.x, this.y, 200, 50);
-    }
-}
-
-
-
-var createImage = function (  ) {
-    ctx.drawImage(resources.get('/static/img/fireball.png'), 300 , 400 , 200, 50)
 }
 
 var lastTime
@@ -121,15 +87,28 @@ function init() {
     main()
 }
 
-var drowFireBalls  = function () {
-    balls.forEach( function (ball) {
-        ball.draw()
-    } )
-}
-
 var warlock = function (x, y) {
     this.x = x
     this.y = y
+}
+
+var Vector = function(x, y) {
+    this.x = x
+    this.y = y
+}
+
+Vector.prototype = {
+    add: function (v) {
+        return new Vector(this.x + v.x, this.y + v.y)
+    },
+
+    substract: function (v) {
+        return new Vector(this.x - v.x, this.y - v.y)
+    },
+
+    normalize: function(l) {
+        return new Vector(this.x / l, this.y / l)
+    }
 }
 
 warlock.prototype = {
@@ -142,17 +121,16 @@ warlock.prototype = {
 
             var length = Math.sqrt(Math.pow(speed.x, 2) + Math.pow(speed.y, 2))
 
-            this.x += speed.x/length * 2
-            this.y += speed.y/length * 2
-            
+            if (length > 3 ) {
+                this.x += speed.x * 4 / length 
+                this.y += speed.y * 4 / length
+            }
         }
 
         ctx.fillStyle = 'red'
         ctx.beginPath();
         ctx.arc(this.x, this.y, 25, 0, 2 * Math.PI);
         ctx.fill();
-
-        //ctx.drawImage(resources.get('/static/img/warlock.jpg'), this.x , this.y , 100, 100);
     }
 }
 
@@ -164,26 +142,13 @@ window.onmousedown = function ( e ) {
             x: mouse.x,
             y: mouse.y
         }
-        // var direction = {
-        //     x: mouse.x - player.x,
-        //     y: player.y - mouse.y
-        // }
     }
 }
 
 
 warlocks = []
-warlocks.push(new warlock(mouse.x, mouse.y))
+warlocks.push(new warlock(canvas.width / 3, canvas.height / 4))
 
-// socket.on('state', function(players) {
-//     warlocks = []
-//     for (var id in players) {
-//         var player = players[id];
-//         var position = player.positonVector
-//         let w = new warlock(position.x, position.y)
-//         warlocks.push(w)
-//   }
-// })
 
 function render() {
     ctx.fillStyle = terrainPattern
@@ -193,7 +158,6 @@ function render() {
     warlocks.forEach(function(w) {
         w.draw()
     })
-    drowFireBalls()
 };
 
 
