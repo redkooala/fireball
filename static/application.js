@@ -88,16 +88,15 @@ function init() {
 }
 
 var warlock = function (x, y) {
+   this.positioinV = new Vector2d(x, y)
+}
+
+var Vector2d = function(x, y) {
     this.x = x
     this.y = y
 }
 
-var Vector = function(x, y) {
-    this.x = x
-    this.y = y
-}
-
-Vector.prototype = {
+Vector2d.prototype = {
     add: function (v) {
         return new Vector(this.x + v.x, this.y + v.y)
     },
@@ -135,8 +134,8 @@ warlock.prototype = {
 }
 
 //HEPLERS
-window.onmousedown = function ( e ) {
-    if( e.target === canvas ) {
+window.onmousedown = function (e) {
+    if(e.target === canvas) {
         var player = warlocks[0]
         player.direction = {
             x: mouse.x,
